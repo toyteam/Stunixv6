@@ -46,3 +46,14 @@ Network Trash Folder
 Temporary Items
 .apdisk
 /.vs/
+*.tex
+*.dvi
+*.idx
+*.aux
+*.log
+*.ind
+*.ilg
+*.o
+*.d
+*.asm
+*.sym
