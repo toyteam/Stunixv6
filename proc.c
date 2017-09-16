@@ -418,6 +418,16 @@ kill(int pid)
   return -1;
 }
 
+char *
+getcwd(char *buffer, uint maxlen)
+{
+  acquire(&ptable.lock);
+
+  dirlookup(proc->cwd,buffer,&maxlen);
+  release(&ptable.lock);
+  return buffer;
+}
+
 //PAGEBREAK: 36
 // Print a process listing to console.  For debugging.
 // Runs when user types ^P on console.

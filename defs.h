@@ -116,6 +116,7 @@ void            userinit(void);
 int             wait(void);
 void            wakeup(void*);
 void            yield(void);
+char *          getcwd(char *buffer, uint maxlen);
 
 // swtch.S
 void            swtch(struct context**, struct context*);

@@ -87,3 +87,16 @@ sys_uptime(void)
   release(&tickslock);
   return xticks;
 }
+
+char *
+sys_getcwd(void)
+{
+  char *buffer;
+  int maxlen;
+
+  if(argstr(0, &buffer) < 0 || argint(1, (int*)&maxlen) < 0){
+    return 0;
+  }
+
+  return getcwd(buffer,maxlen);
+}

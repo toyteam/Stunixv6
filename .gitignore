@@ -82,3 +82,4 @@ mkfs
 vectors.S
 xv6.img
 _man
+_pwd
