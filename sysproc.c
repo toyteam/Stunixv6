@@ -55,8 +55,7 @@ sys_sbrk(void)
   return addr;
 }
 
-int
-sys_sleep(void)
+int sys_sleep(void)
 {
   int n;
   uint ticks0;

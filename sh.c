@@ -54,8 +54,7 @@ void panic(char*);
 struct cmd *parsecmd(char*);
 
 // Execute cmd.  Never returns.
-void
-runcmd(struct cmd *cmd)
+void runcmd(struct cmd *cmd)
 {
   int p[2];
   struct backcmd *bcmd;
@@ -141,8 +140,7 @@ getcmd(char *buf, int nbuf)
   return 0;
 }
 
-int
-main(void)
+int main(void)
 {
   static char buf[100];
   int fd;
@@ -172,15 +170,13 @@ main(void)
   exit();
 }
 
-void
-panic(char *s)
+void panic(char *s)
 {
   printf(2, "%s\n", s);
   exit();
 }
 
-int
-fork1(void)
+int fork1(void)
 {
   int pid;
   
