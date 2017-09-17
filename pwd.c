@@ -8,7 +8,7 @@ char buf[DIRSIZ];
 int main(int argc, char *argv[])
 {
   getcwd(buf, DIRSIZ);
-  printf(1, "%s", buf);
+  printf(1, "%s\n", buf);
 
   exit();
 }

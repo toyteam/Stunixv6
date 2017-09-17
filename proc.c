@@ -6,6 +6,7 @@
 #include "x86.h"
 #include "proc.h"
 #include "spinlock.h"
+#include "fs.h"
 
 struct {
   struct spinlock lock;
@@ -421,10 +422,15 @@ kill(int pid)
 char *
 getcwd(char *buffer, uint maxlen)
 {
-  acquire(&ptable.lock);
+  struct dirent de;
 
-  dirlookup(proc->cwd,buffer,&maxlen);
-  release(&ptable.lock);
+  if(readi(proc->cwd, (char*)&de, 0, sizeof(de)) != sizeof(de))
+    panic("dirlink read");
+  if(de.inum == 0){
+      buffer=0;
+      return 0;
+  }
+  memmove(buffer,de.name,strlen(de.name) + 1);
   return buffer;
 }
 

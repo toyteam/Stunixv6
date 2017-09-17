@@ -636,6 +636,9 @@ namex(char *path, int nameiparent, char *name)
   return ip;
 }
 
+/*
+*  Get the inode struct by a path string
+*/
 struct inode*
 namei(char *path)
 {
