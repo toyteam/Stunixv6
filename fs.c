@@ -557,6 +557,64 @@ int dirlookupi(struct inode *dp, struct inode *file, char *name, uint maxlen)
   return 1;
 }
 
+int getpath(struct inode* node, char* path, uint maxlen)
+{
+  struct inode *parent_node = 0;
+  struct inode *cur_node = 0;
+  char tmp[DIRSIZ];
+  int tmp_len;
+  int path_len;
+
+  if(maxlen<=1)
+  {
+    return 0;
+  }
+
+  path[0] = '\0';
+  cur_node = node;
+  while(1)
+  {
+    parent_node = iparent(cur_node);
+    ilock(parent_node);
+    if(dirlookupi(parent_node,cur_node,tmp,maxlen))
+      panic("look up fail");
+    iunlock(parent_node);
+    
+    if(parent_node->inum == cur_node->inum)
+    {
+      if(path[0] == '\0' && maxlen >= 2)
+      {
+        path[0]='\\';
+        path[1]='\0';
+      }
+      break;
+    }
+    
+    // insert before string
+    tmp_len=strlen(tmp);
+    path_len=strlen(path);
+    if(tmp_len +path_len + 1 < maxlen)
+    {
+      memmove(path + tmp_len + 1,path,path_len+1);
+      memmove(path + 1,tmp, tmp_len);
+      path[0]='\\';
+    }
+    else
+    {
+      return 1;
+    }
+
+    if(cur_node != node)
+      iput(cur_node);
+    cur_node=parent_node;
+  }
+  
+  if(cur_node != node)
+    iput(cur_node);
+
+  return 0;
+}
+
 struct inode * iparent(struct inode *dp)
 {
   struct dirent de;
