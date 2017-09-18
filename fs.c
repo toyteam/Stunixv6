@@ -528,6 +528,50 @@ dirlookup(struct inode *dp, char *name, uint *poff)
   return 0;
 }
 
+// Look for a directory entry in a directory.
+// If found, set *poff to byte offset of entry.
+int dirlookupi(struct inode *dp, struct inode *file, char *name, uint maxlen)
+{
+  uint off;
+  struct dirent de;
+  int nameLen;
+
+  if(dp->type != T_DIR)
+    panic("dirlookupi not DIR");
+
+  for(off = 0; off < dp->size; off += sizeof(de)){
+    if(readi(dp, (char*)&de, off, sizeof(de)) != sizeof(de))
+      panic("dirlink read");
+    if(de.inum == 0)
+      continue;
+    if(de.inum == file->inum){
+      // entry matches path element
+      nameLen = strlen(de.name);
+      if(nameLen < maxlen){
+        memmove(name,de.name,nameLen + 1);
+      }
+      return 0;
+    }
+  }
+
+  return 1;
+}
+
+struct inode * iparent(struct inode *dp)
+{
+  struct dirent de;
+  if(dp->type != T_DIR)
+    panic("iparent not DIR");
+  if(readi(dp, (char*)&de, sizeof(de), sizeof(de)) != sizeof(de))
+    panic("dirlink read");
+  if(de.inum == 0){
+    return 0;
+  }
+
+  // read inode by parent inum 
+  return iget(dp->dev, de.inum);
+}
+
 // Write a new directory entry (name, inum) into the directory dp.
 int
 dirlink(struct inode *dp, char *name, uint inum)

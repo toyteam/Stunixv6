@@ -7,6 +7,7 @@
 #include "proc.h"
 #include "spinlock.h"
 #include "fs.h"
+#include "file.h"
 
 struct {
   struct spinlock lock;
@@ -422,15 +423,56 @@ kill(int pid)
 char *
 getcwd(char *buffer, uint maxlen)
 {
-  struct dirent de;
+  struct inode *parent_node;
+  struct inode *cur_node;
+  char tmp[DIRSIZ];
+  int tmp_len;
+  int buffer_len;
 
-  if(readi(proc->cwd, (char*)&de, 0, sizeof(de)) != sizeof(de))
-    panic("dirlink read");
-  if(de.inum == 0){
-      buffer=0;
-      return 0;
+  if(maxlen<=1)
+  {
+    return 0;
   }
-  memmove(buffer,de.name,strlen(de.name) + 1);
+
+  memset(buffer,0,maxlen);
+  cur_node = proc->cwd;
+  while(1)
+  {
+    parent_node = iparent(cur_node);
+    if(dirlookupi(parent_node,cur_node,tmp,maxlen))
+      panic("look up fail");
+    
+    if(parent_node->inum == cur_node->inum)
+    {
+      if(buffer[0] == '\0' && maxlen >= 2)
+      {
+        buffer[0]='\\';
+        buffer[1]='\0';
+      }
+      break;
+    }
+      
+    
+    // insert before string
+    tmp_len=strlen(tmp);
+    buffer_len=strlen(buffer);
+    if(tmp_len +buffer_len + 1 < maxlen)
+    {
+      memmove(buffer + tmp_len + 1,buffer,buffer_len+1);
+      memmove(buffer + 1,tmp, tmp_len);
+      buffer[0]='\\';
+    }
+    else
+    {
+      buffer = 0;
+      break;
+    }
+
+    
+
+    cur_node=parent_node;
+  }
+  
   return buffer;
 }
 
