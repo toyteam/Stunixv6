@@ -7,8 +7,10 @@ char buf[DIRSIZ];
 
 int main(int argc, char *argv[])
 {
-  getcwd(buf, DIRSIZ);
-  printf(1, "%s\n", buf);
+  if(getcwd(buf, DIRSIZ))
+    printf(1, "%s\n", buf);
+  else
+    printf(1,"%s\n","The path is too long.");
 
   exit();
 }
