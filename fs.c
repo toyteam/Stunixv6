@@ -584,7 +584,7 @@ int getpath(struct inode* node, char* path, uint maxlen)
     {
       if(path[0] == '\0' && maxlen >= 2)
       {
-        path[0]='\\';
+        path[0]='/';
         path[1]='\0';
       }
       break;
@@ -597,7 +597,7 @@ int getpath(struct inode* node, char* path, uint maxlen)
     {
       memmove(path + tmp_len + 1,path,path_len+1);
       memmove(path + 1,tmp, tmp_len);
-      path[0]='\\';
+      path[0]='/';
     }
     else
     {

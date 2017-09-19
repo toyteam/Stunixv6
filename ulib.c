@@ -67,6 +67,21 @@ gets(char *buf, int max)
   return buf;
 }
 
+// useless
+char
+getch(char *c)
+{
+  int n;
+  while(1)
+  {
+    n = read(0, c, 1);
+    if(n >= 1)
+        break;
+  }
+
+  return *c;
+}
+
 int
 stat(char *n, struct stat *st)
 {

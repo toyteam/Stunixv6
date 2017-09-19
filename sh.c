@@ -132,7 +132,9 @@ void runcmd(struct cmd *cmd)
 int
 getcmd(char *buf, int nbuf)
 {
-  printf(2, "$ ");
+  char cwd[255];
+  getcwd(cwd,255);
+  printf(2, "root:%s$ ", cwd);
   memset(buf, 0, nbuf);
   gets(buf, nbuf);
   if(buf[0] == 0) // EOF
