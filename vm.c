@@ -215,6 +215,31 @@ loaduvm(pde_t *pgdir, char *addr, struct inode *ip, uint offset, uint sz)
   return 0;
 }
 
+int do_page_fault(pde_t *pgdir)
+{
+  char *mem;
+  uint a;
+  uint newsz;
+
+  a = PGROUNDDOWN(rcr2());
+  newsz = proc->sz;
+  
+  if(a < newsz){
+    mem = kalloc();
+    if(mem == 0){
+      cprintf("do_page_fault out of memory\n");
+      return 0;
+    }
+    memset(mem, 0, PGSIZE);
+    mappages(pgdir, (char*)a, PGSIZE, v2p(mem), PTE_W|PTE_U);
+  }
+  else
+  {
+    newsz = 0;
+  }
+  return newsz;
+}
+
 // Allocate page tables and physical memory to grow process from oldsz to
 // newsz, which need not be page aligned.  Returns new size or 0 on error.
 int
