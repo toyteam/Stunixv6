@@ -23,6 +23,7 @@ char* sbrk(int);
 int sleep(int);
 int uptime(void);
 int getcwd(char*,uint maxlen);
+int alarm(uint tick, void(*handler)());
 
 // ulib.c
 int stat(char*, struct stat*);

@@ -2,6 +2,8 @@
 #include "param.h"
 #include "memlayout.h"
 #include "mmu.h"
+#include "spinlock.h"
+#include "signal.h"
 #include "proc.h"
 #include "defs.h"
 #include "x86.h"

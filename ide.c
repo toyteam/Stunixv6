@@ -5,10 +5,11 @@
 #include "param.h"
 #include "memlayout.h"
 #include "mmu.h"
+#include "spinlock.h"
+#include "signal.h"
 #include "proc.h"
 #include "x86.h"
 #include "traps.h"
-#include "spinlock.h"
 #include "buf.h"
 
 #define IDE_BSY       0x80

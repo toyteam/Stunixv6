@@ -4,6 +4,8 @@
 #include "param.h"
 #include "memlayout.h"
 #include "mmu.h"
+#include "spinlock.h"
+#include "signal.h"
 #include "proc.h"
 
 int

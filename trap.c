@@ -3,10 +3,11 @@
 #include "param.h"
 #include "memlayout.h"
 #include "mmu.h"
+#include "spinlock.h"
+#include "signal.h"
 #include "proc.h"
 #include "x86.h"
 #include "traps.h"
-#include "spinlock.h"
 
 // Interrupt descriptor table (shared by all CPUs).
 struct gatedesc idt[256];
@@ -81,7 +82,17 @@ trap(struct trapframe *tf)
   case T_PGFLT:
     do_page_fault(proc->pgdir);
     break;
+
+  case T_DIVIDE:
+    cprintf("a divide error trap %d from cpu %d eip %x (cr2=0x%x)\n",
+    tf->trapno, cpu->id, tf->eip, rcr2());
+    break;
     
+  case T_BRKPT:
+    cprintf("a breakpoint trap %d from cpu %d eip %x (cr2=0x%x)\n",
+    tf->trapno, cpu->id, tf->eip, rcr2());
+    break;
+
   //PAGEBREAK: 13
   default:
     if(proc == 0 || (tf->cs&3) == 0){
