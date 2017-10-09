@@ -10,5 +10,12 @@ void signal(int sig, void (*func)(int))
 
 void do_signal()
 {
+    for(int i=0;i<SIGMAX;++i)
+    {
+        if(proc->signal&(1<<i)==(1<<i))
+        {
+            
+        }
+    }
     return;
 }
